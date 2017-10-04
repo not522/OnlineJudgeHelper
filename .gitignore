@@ -5,7 +5,7 @@ out.txt
 *.zip
 *.class
 *.exe
+*.pyc
 yukicoder_test.*/
-
 yuki
 yuki_test

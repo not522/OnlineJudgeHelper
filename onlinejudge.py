@@ -220,6 +220,12 @@ class OnlineJudge:
     def get_language_id_from_extension(self):
         raise NotImplementedError
 
+    def get_source_code(self):
+        return subprocess.check_output([
+            'python',
+            os.path.join(os.path.dirname(os.environ['LIB_PATH']), '../import.py'),
+            self.get_source_file_name(), '-p'])
+
 
 class POJ(OnlineJudge):
     def __init__(self, options, args):
@@ -254,7 +260,7 @@ class POJ(OnlineJudge):
         postdata = dict()
         postdata['language'] = self.get_language_id()
         postdata['problem_id'] = self.problem_id
-        postdata['source'] = open(self.get_source_file_name()).read()
+        postdata['source'] = self.get_source_code()
         postdata['submit'] = 'Submit'
         params = urllib.urlencode(postdata)
         p = opener.open('http://poj.org/submit', params)
@@ -348,7 +354,7 @@ class MJudge(OnlineJudge):
         postdata['m'] = '1'
         postdata['pid'] = self.problem_id
         postdata['lang'] = '1'
-        postdata['code'] = open(self.get_source_file_name()).read()
+        postdata['code'] = self.get_source_code()
         params = urllib.urlencode(postdata)
         p = opener.open('http://m-judge.maximum.vc/submit.cgi', params)
         print('Submit ... ' + str(p.getcode()))
@@ -387,7 +393,7 @@ class AOJ(OnlineJudge):
         postdata['password'] = setting['password']
         postdata['problemNO'] = self.problem_id
         postdata['language'] = self.get_language_id()
-        postdata['sourceCode'] = open(self.get_source_file_name()).read()
+        postdata['sourceCode'] = self.get_source_code()
         postdata['submit'] = 'Send'
         params = urllib.urlencode(postdata)
         p = opener.open('http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit', params)
@@ -571,7 +577,7 @@ class AtCoder(OnlineJudge):
         postdata['__session'] = session
         postdata['task_id'] = task_id
         postdata['language_id_%d' % task_id] = self.get_language_id()
-        postdata['source_code'] = open(self.get_source_file_name()).read()
+        postdata['source_code'] = self.get_source_code()
         postdata['submit'] = 'submit'
         params = urllib.urlencode(postdata)
         p = opener.open('https://%s.contest.atcoder.jp/submit?task_id=%d' % (self.contest_id, task_id), params)
@@ -635,7 +641,7 @@ class ZOJContest(OnlineJudge):
         postdata = dict()
         postdata['problemId'] = self.problem_id
         postdata['languageId'] = '2'
-        postdata['source'] = open(self.get_source_file_name()).read()
+        postdata['source'] = self.get_source_code()
         postdata['submit'] = 'Submit'
         params = urllib.urlencode(postdata)
         p = opener.open('http://acm.zju.edu.cn/onlinejudge/contestSubmit.do')
@@ -694,7 +700,7 @@ class NPCA(OnlineJudge):
         postdata = dict()
         postdata['_method'] = 'POST'
         postdata['data[Submission][language_id]'] = self.get_language_id()
-        postdata['data[Submission][source]'] = open(self.get_source_file_name()).read()
+        postdata['data[Submission][source]'] = self.get_source_code()
         postdata['submit'] = 'Submit'
         params = urllib.urlencode(postdata)
         p = opener.open('http://judge.npca.jp/submissions/submit/%s/' % self.problem_id)
@@ -752,7 +758,7 @@ class KCS(OnlineJudge):
 
         postdata = dict()
         postdata['language'] = self.get_language_id()
-        postdata['code'] = open(self.get_source_file_name()).read()
+        postdata['code'] = self.get_source_code()
         postdata['submit'] = 'submit'
         params = urllib.urlencode(postdata)
         p = opener.open('http://kcs.miz-miz.biz/contest/%s/submit/%s' % (self.contest_id, self.problem_id), params)

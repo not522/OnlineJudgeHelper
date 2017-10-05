@@ -371,7 +371,7 @@ class AOJ(OnlineJudge):
 
     def download(self):
         html = self.download_html()
-        index = html.rfind('>Sample Input</')
+        index = html.find('>Sample Input')
         html = html[index:]
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)

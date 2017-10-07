@@ -582,66 +582,6 @@ class AtCoder(OnlineJudge):
                 '.hs': '11'}
 
 
-class ZOJContest(OnlineJudge):
-    def __init__(self, options, args):
-        OnlineJudge.__init__(self, options, args[0])
-
-    def get_url(self):
-        return ('http://acm.zju.edu.cn/onlinejudge/'
-                'showContestProblem.do?problemId=%s' %
-                self.problem_id)
-
-    def get_opener(self):
-        if self.opener is None:
-            opener = OnlineJudge.get_opener(self)
-
-            setting = json.load(open(self.options.setting_file_path))['zoj']
-            postdata = dict()
-            postdata['handle'] = setting['user_id']
-            postdata['password'] = setting['password']
-            postdata['rememberMe'] = '1'
-            postdata['submit'] = 'Login'
-            params = urllib.urlencode(postdata)
-            p = opener.open(
-                'http://acm.zju.edu.cn/onlinejudge/login.do', params)
-            print('Login ... ' + str(p.getcode()))
-        return self.opener
-
-    def download(self):
-        html = self.download_html()
-        p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
-        result = p.findall(html)
-        n = len(result) / 2
-        for index in range(1, n + 1):
-            input_file_name = self.get_input_file_path(index)
-            output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(
-                self.format_pre(result[index * 2 - 2]))
-            open(output_file_name, 'w').write(
-                self.format_pre(result[index * 2 - 1]))
-        return True
-
-    def submit(self):
-        opener = self.get_opener()
-
-        postdata = dict()
-        postdata['problemId'] = self.problem_id
-        postdata['languageId'] = '2'
-        postdata['source'] = self.get_source_code()
-        postdata['submit'] = 'Submit'
-        p = opener.open('http://acm.zju.edu.cn/onlinejudge/contestSubmit.do')
-        print('Submit ... ' + str(p.getcode()))
-
-    def get_language_id_from_extension(self):
-        return {'.cpp': '2',
-                '.cc': '2',
-                '.c': '1',
-                '.java': '4',
-                '.py': '5',
-                '.perl': '6',
-                '.php': '8'}
-
-
 class KCS(OnlineJudge):
     contest_id = None
 

@@ -22,7 +22,6 @@
 -   AOJ
 -   CodeChef (サンプル入出力データのダウンロードのみ)
 -   AtCoder
--   ZOJContest
 -   KCS
 -   yukicoder (サンプル入出力データのダウンロードのみ)
 
@@ -49,7 +48,6 @@ CodeForces         | `--codeforces` | `http://codeforces.com/contest/[ contest_i
 AOJ                | `--aoj`        | `http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=[ problem_id ]`
 CodeChef           | `--codechef`   | `http://www.codechef.com/[ contest_id ]/problems/[ problem_id ]`
 AtCoder            | `--atcoder`    | `http://[ contest_id ].contest.atcoder.jp/tasks/[ problem_id ]`
-ZOJContest         | `--zojcontest` | `http://acm.zju.edu.cn/onlinejudge/showContestProblem.do?problemId=[ problem_id ]`
 KCS                | `--kcs`        | `http://kcs.miz-miz.biz/contest/[ contest_id ]/view_problem/[ problem_id ]`
 yukicoder          | `--yukicoder`  | problem\_id=問題番号（No.xx 問題名 のxx部分）(`http://yukicoder.me/problems/no/[ problem_id ]`)
 
@@ -66,8 +64,7 @@ json形式で書いたものです。
 
 ``` json
     {
-      "atcoder":{"user_id":"nodchip","password":"hogehoge", "browser":"C:/Users/nodchip/AppData/Local/Google/Chrome/Application/chrome.exe"},
-      "zoj":{"user_id":"nodchip","password":"fufagufa", "browser":"C:/Users/nodchip/AppData/Local/Google/Chrome/Application/chrome.exe"}
+      "atcoder":{"user_id":"nodchip","password":"hogehoge", "browser":"C:/Users/nodchip/AppData/Local/Google/Chrome/Application/chrome.exe"}
     }
 ```
 

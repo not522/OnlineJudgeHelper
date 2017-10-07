@@ -56,9 +56,6 @@ def main():
     contest.add_argument("--atcoder", action="store_const",
                          const="atcoder", dest="contest",
                          help="AtCoder")
-    contest.add_argument("--zojcontest", action="store_const",
-                         const="zoj_contest", dest="contest",
-                         help="ZOJ Contest")
     contest.add_argument("--kcs", action="store_const",
                          const="kcs", dest="contest",
                          help="KCS (Kagamiz Contest System)")
@@ -127,9 +124,7 @@ def main():
             options.source_file_name = setting['source_file_name']
 
     online_judge = None
-    if options.contest == "zoj_contest":
-        online_judge = ZOJContest(options, args)
-    elif options.contest == "atcoder":
+    if options.contest == "atcoder":
         online_judge = AtCoder(options, args)
     elif options.contest == "codechef":
         online_judge = CodeChef(options, args)

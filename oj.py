@@ -82,9 +82,9 @@ def main():
                       dest='testcase_directory', default=None,
                       help='Specify the directory for testcases')
 
-    parser.add_argument("-t", "--titech-pubnet", action="store_true",
-                      dest="titech_pubnet", default=False,
-                      help="Use titech pubnet proxy",)
+    parser.add_argument('-t', '--test-case-index', action='store',
+                      dest='test_case_index', default='*',
+                      help='Specify the index of test case')
     parser.add_argument("-e", action="store",
                       dest="floating_point", default=None,
                       help="Use floating point validator and set max error")

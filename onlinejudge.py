@@ -32,10 +32,6 @@ class OnlineJudge:
     def __init__(self, options, problem_id):
         self.options = options
         self.problem_id = problem_id
-        if options.titech_pubnet:
-            self.proxies = {'http': 'http://proxy.noc.titech.ac.jp:3128'}
-        else:
-            self.proxies = None
         self.opener = None
 
     def get_url(self):
@@ -82,10 +78,7 @@ class OnlineJudge:
         if self.opener == None:
             cj = cookielib.CookieJar()
             cjhdr = urllib2.HTTPCookieProcessor(cj)
-            if self.proxies == None:
-                self.opener = urllib2.build_opener(cjhdr)
-            else:
-                self.opener = urllib2.build_opener(cjhdr, urllib2.ProxyHandler(self.proxies))
+            self.opener = urllib2.build_opener(cjhdr)
         return self.opener
 
     def get_solution(self):
@@ -149,7 +142,7 @@ class OnlineJudge:
             print('CompileError')
             exit(-1)
 
-        if not os.path.exists(self.get_input_file_path(0)) or not os.path.exists(self.get_output_file_path(0)):
+        if not os.path.exists(self.get_input_file_path(1)):
             print('downloading...')
             self.download()
 
@@ -161,13 +154,13 @@ class OnlineJudge:
         total = 0
         no_input_files = True
 
-        for input_file_path in glob.iglob(os.path.join(self.options.testcase_directory, self.get_input_file_name('*'))):
+        for input_file_path in sorted(glob.iglob(os.path.join(self.options.testcase_directory, self.get_input_file_name(self.options.test_case_index)))):
             case_name = input_file_path.rsplit('.in.txt', 1)[0]
             output_file_path = case_name + '.out.txt'
 
             no_input_files = False
 
-            print(clr.GREEN + '----- Case {} -----'.format(case_name) + clr.RESET)
+            print(clr.GREEN + '----- Case {} -----'.format(case_name.split('.')[-1]) + clr.RESET)
 
             execution_time = solution.execute(input_file_path, 'out.txt')
 
@@ -239,11 +232,11 @@ class POJ(OnlineJudge):
         p = re.compile('<pre class="sio">(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -296,11 +289,11 @@ class CodeForces(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
 
@@ -332,11 +325,11 @@ class MJudge(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -376,11 +369,11 @@ class AOJ(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -426,13 +419,13 @@ class AOJ_test(OnlineJudge):
         return self.get_opener().open(url).read()
 
     def download(self):
-        for index in range(100):
+        for index in range(1, 100):
             try:
-                input_data=self.download_html(index+1,"in")
+                input_data=self.download_html(index,"in")
                 if input_data == "In preparation.\n":
                     print("testcase in preparation")
                     break
-                output_data=self.download_html(index+1,"out")
+                output_data=self.download_html(index,"out")
                 input_file_name = self.get_input_file_path(index)
                 output_file_name = self.get_output_file_path(index)
                 open(input_file_name, 'w').write(input_data)
@@ -463,11 +456,11 @@ class CodeChef(OnlineJudge):
         p = re.compile('put:</b>(.+?)<', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
 
@@ -491,11 +484,11 @@ class ImoJudge(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
 
@@ -553,11 +546,11 @@ class AtCoder(OnlineJudge):
         p = re.compile('<pre.*?>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -628,11 +621,11 @@ class ZOJContest(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -687,11 +680,11 @@ class NPCA(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -746,11 +739,11 @@ class KCS(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def submit(self):
@@ -792,11 +785,11 @@ class yukicoder(OnlineJudge):
         p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2
-        for index in range(n):
+        for index in range(1, n + 1):
             input_file_name = self.get_input_file_path(index)
             output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 + 0]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 + 1]))
+            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
+            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
         return True
 
     def get_source_file_name(self):

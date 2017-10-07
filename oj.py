@@ -5,7 +5,6 @@ import json
 import os
 import os.path
 
-from onlinejudge import ZOJContest
 from onlinejudge import AtCoder
 from onlinejudge import CodeChef
 from onlinejudge import CodeForces

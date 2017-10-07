@@ -40,27 +40,18 @@ def main():
     contest.add_argument("--codeforces", action="store_const",
                       const="codeforces", dest="contest",
                       help="CodeForces")
-    contest.add_argument("--mjudge", action="store_const",
-                      const="m_judge", dest="contest",
-                      help="M-Judge")
     contest.add_argument("--aoj", action="store_const",
                       const="aoj", dest="contest",
                       help="Aizu Online Judge")
     contest.add_argument("--codechef", action="store_const",
                       const="codechef", dest="contest",
                       help="CodeChef")
-    contest.add_argument("--imojudge", action="store_const",
-                      const="imojudge", dest="contest",
-                      help="Imo Judge")
     contest.add_argument("--atcoder", action="store_const",
                       const="atcoder", dest="contest",
                       help="AtCoder")
     contest.add_argument("--zojcontest", action="store_const",
                       const="zoj_contest", dest="contest",
                       help="ZOJ Contest")
-    contest.add_argument("--npca", action="store_const",
-                      const="npca", dest="contest",
-                      help="NPCA (Nada Personal Computer users' Association) Judge")
     contest.add_argument("--kcs", action="store_const",
                       const="kcs", dest="contest",
                       help="KCS (Kagamiz Contest System)")
@@ -131,18 +122,12 @@ def main():
         online_judge = ZOJContest(options, args)
     elif options.contest == "atcoder":
         online_judge = AtCoder(options, args)
-    elif options.contest == "imojudge":
-        online_judge = ImoJudge(options, args)
     elif options.contest == "codechef":
         online_judge = CodeChef(options, args)
     elif options.contest == "codeforces":
         online_judge = CodeForces(options, args)
-    elif options.contest == "m_judge":
-        online_judge = MJudge(options, args)
     elif options.contest == "aoj":
         online_judge = AOJ(options, args)
-    elif options.contest == "npca":
-        online_judge = NPCA(options, args)
     elif options.contest == "kcs":
         online_judge = KCS(options, args)
     elif options.contest == "yukicoder":

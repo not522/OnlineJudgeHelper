@@ -297,64 +297,6 @@ class CodeForces(OnlineJudge):
         return True
 
 
-class MJudge(OnlineJudge):
-    def __init__(self, options, args):
-        OnlineJudge.__init__(self, options, args[0])
-
-    def get_url(self):
-        return 'http://m-judge.maximum.vc/problem.cgi?pid=' + self.problem_id
-
-    def download_html(self):
-        opener = self.get_opener()
-
-        setting = json.load(open(self.options.setting_file_path))['m_judge']
-        postdata = dict()
-        postdata['user'] = setting['user_id']
-        postdata['pswd'] = setting['password']
-        params = urllib.urlencode(postdata)
-        p = opener.open('http://m-judge.maximum.vc/login.cgi', params)
-
-        url = self.get_url()
-        p = opener.open(url)
-        return p.read()
-
-    def download(self):
-        html = self.download_html()
-        index = html.rfind('Sample Input')
-        html = html[index:]
-        p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
-        result = p.findall(html)
-        n = len(result) / 2;
-        for index in range(1, n + 1):
-            input_file_name = self.get_input_file_path(index)
-            output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
-        return True
-
-    def submit(self):
-        opener = self.get_opener()
-
-        setting = json.load(open(self.options.setting_file_path))['m_judge']
-        postdata = dict()
-        postdata['user'] = setting['user_id']
-        postdata['pswd'] = setting['password']
-        params = urllib.urlencode(postdata)
-        p = opener.open('http://m-judge.maximum.vc/login.cgi', params)
-        print('Login ... ' + str(p.getcode()))
-
-        postdata = dict()
-        postdata['m'] = '1'
-        postdata['pid'] = self.problem_id
-        postdata['lang'] = '1'
-        postdata['code'] = self.get_source_code()
-        params = urllib.urlencode(postdata)
-        p = opener.open('http://m-judge.maximum.vc/submit.cgi', params)
-        print('Submit ... ' + str(p.getcode()))
-
-        subprocess.call([setting['browser'], 'http://m-judge.maximum.vc/result.cgi'])
-
-
 class AOJ(OnlineJudge):
     def __init__(self, options, args):
         OnlineJudge.__init__(self, options, args[0])
@@ -454,34 +396,6 @@ class CodeChef(OnlineJudge):
     def download(self):
         html = self.download_html()
         p = re.compile('put:</b>(.+?)<', re.M | re.S | re.I)
-        result = p.findall(html)
-        n = len(result) / 2;
-        for index in range(1, n + 1):
-            input_file_name = self.get_input_file_path(index)
-            output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
-        return True
-
-
-class ImoJudge(OnlineJudge):
-    contest_id = None
-    def __init__(self, options, args):
-        OnlineJudge.__init__(self, options, args[1])
-        self.contest_id = args[0]
-
-    def get_input_file_name(self, index):
-        return self.contest_id + '.' + self.problem_id + '.' + str(index) + '.in.txt'
-
-    def get_output_file_name(self, index):
-        return self.contest_id + '.' + self.problem_id + '.' + str(index) + '.out.txt'
-
-    def get_url(self):
-        return 'http://judge.imoz.jp/page.php?page=view_problem&pid=%s&cid=%s' % (self.problem_id, self.contest_id)
-
-    def download(self):
-        html = self.download_html()
-        p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
         result = p.findall(html)
         n = len(result) / 2;
         for index in range(1, n + 1):
@@ -648,65 +562,6 @@ class ZOJContest(OnlineJudge):
                 '.py':'5',
                 '.perl':'6',
                 '.php':'8',}
-
-
-class NPCA(OnlineJudge):
-    def __init__(self, options, args):
-        OnlineJudge.__init__(self, options, args[0])
-
-    def get_url(self):
-        return 'http://judge.npca.jp/problems/view/%s' % self.problem_id
-
-    def get_opener(self):
-        if self.opener == None:
-            opener = OnlineJudge.get_opener(self)
-
-            setting = json.load(open(self.options.setting_file_path))['npca']
-            postdata = dict()
-            postdata['_method'] = 'POST'
-            postdata['data[User][username]'] = setting['user_id']
-            postdata['data[User][password]'] = setting['password']
-            postdata['data[User][active]'] = '1'
-            postdata['submit'] = 'Login'
-            params = urllib.urlencode(postdata)
-            p = opener.open('http://judge.npca.jp/users/login', params)
-            print('Login ... ' + str(p.getcode()))
-        return self.opener
-
-    def download(self):
-        opener = self.get_opener()
-
-        html = self.download_html()
-        p = re.compile('<pre>(.+?)</pre>', re.M | re.S | re.I)
-        result = p.findall(html)
-        n = len(result) / 2;
-        for index in range(1, n + 1):
-            input_file_name = self.get_input_file_path(index)
-            output_file_name = self.get_output_file_path(index)
-            open(input_file_name, 'w').write(self.format_pre(result[index * 2 - 2]))
-            open(output_file_name, 'w').write(self.format_pre(result[index * 2 - 1]))
-        return True
-
-    def submit(self):
-        opener = self.get_opener()
-
-        postdata = dict()
-        postdata['_method'] = 'POST'
-        postdata['data[Submission][language_id]'] = self.get_language_id()
-        postdata['data[Submission][source]'] = self.get_source_code()
-        postdata['submit'] = 'Submit'
-        params = urllib.urlencode(postdata)
-        p = opener.open('http://judge.npca.jp/submissions/submit/%s/' % self.problem_id)
-        print('Submit ... ' + str(p.getcode()))
-
-    def get_language_id_from_extension(self):
-        return {'.cpp':'2',
-                '.cc':'2',
-                '.c':'1',
-                '.java':'7',
-                '.py':'11',
-                '.perl':'9',
-                '.php':'10'}
 
 
 class KCS(OnlineJudge):

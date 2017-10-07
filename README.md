@@ -19,13 +19,10 @@
 ### 2.2. 対応オンラインジャッジ
 -   PKU JudgeOnline
 -   CodeForces (サンプル入出力データのダウンロードのみ)
--   MJudge
 -   AOJ
 -   CodeChef (サンプル入出力データのダウンロードのみ)
--   ImoJudge (サンプル入出力データのダウンロードのみ)
 -   AtCoder
 -   ZOJContest
--   NPCA Judge
 -   KCS
 -   yukicoder (サンプル入出力データのダウンロードのみ)
 
@@ -49,13 +46,10 @@ contest\_id,problem\_idに指定する値はオンラインジャッジ毎に異
 -------------------|----------------|--------------
 PKU JudgeOnline    | `--poj`        | `http://acm.pku.edu.cn/JudgeOnline/problem?id=[ problem_id ]`
 CodeForces         | `--codeforces` | `http://codeforces.com/contest/[ contest_id ]/problem/[ problem_id ]`
-MJudge             | `--mjudge`     | `http://m-judge.maximum.vc/problem.cgi?pid=[ problem_id ]`
 AOJ                | `--aoj`        | `http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=[ problem_id ]`
 CodeChef           | `--codechef`   | `http://www.codechef.com/[ contest_id ]/problems/[ problem_id ]`
-ImoJudge           | `--imojudge`   | `http://judge.imoz.jp/page.php?page=view_problem&pid=[ problem_id ]&cid=[ contest_id ]`
 AtCoder            | `--atcoder`    | `http://[ contest_id ].contest.atcoder.jp/tasks/[ problem_id ]`
 ZOJContest         | `--zojcontest` | `http://acm.zju.edu.cn/onlinejudge/showContestProblem.do?problemId=[ problem_id ]`
-NPCA Judge         | `--npca`       | `http://judge.npca.jp/problems/view/[ problem_id ]`
 KCS                | `--kcs`        | `http://kcs.miz-miz.biz/contest/[ contest_id ]/view_problem/[ problem_id ]`
 yukicoder          | `--yukicoder`  | problem\_id=問題番号（No.xx 問題名 のxx部分）(`http://yukicoder.me/problems/no/[ problem_id ]`)
 

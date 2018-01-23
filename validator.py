@@ -2,7 +2,7 @@
 import subprocess
 
 
-class Validator:
+class Validator(object):
     def validate(self, answer_path, output_path):
         raise NotImplementedError
 

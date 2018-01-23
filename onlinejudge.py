@@ -18,8 +18,8 @@ try:
     import colorama
     colorama.init()
     clr = colorama.Fore
-except:
-    class clr:
+except Exception:
+    class clr(object):
         RED = ''
         GREEN = ''
         BLUE = ''
@@ -27,29 +27,30 @@ except:
 
 from validator import DiffValidator
 from validator import FloatingPointValidator
+
 from solution import Solution
 from solution import SolutionC
+from solution import SolutionCs
 from solution import SolutionCxx
-from solution import SolutionJava
+from solution import SolutionD
+from solution import SolutionGo
+from solution import SolutionHaskell
 from solution import SolutionIo
+from solution import SolutionJava
+from solution import SolutionOCaml
+from solution import SolutionPerl
 from solution import SolutionPhp
 from solution import SolutionPyPy
 from solution import SolutionPyPy3
 from solution import SolutionPython
 from solution import SolutionPython3
-from solution import SolutionPerl
+from solution import SolutionRuby
 from solution import SolutionRuby19
 from solution import SolutionRubyTopaz
-from solution import SolutionRuby
-from solution import SolutionHaskell
 from solution import SolutionScala
-from solution import SolutionCs
-from solution import SolutionGo
-from solution import SolutionD
-from solution import SolutionOCaml
 
 
-class OnlineJudge:
+class OnlineJudge(object):
     def __init__(self, options, problem_id):
         self.options = options
         self.problem_id = problem_id
@@ -230,15 +231,15 @@ class OnlineJudge:
             dst = self.get_source_file_name() + ".bak"
             shutil.copyfile(src, dst)
             print('Copied %s to %s' % (src, dst))
-        except IOError, (errno, strerror):
-            print("I/O error(%s): %s" % (errno, strerror))
+        except IOError as error:
+            print("I/O error(%s): %s" % (error[0], error[1]))
         try:
             src = 'template.cpp'
             dst = self.get_source_file_name()
             shutil.copyfile(src, dst)
             print('Copied %s to %s' % (src, dst))
-        except IOError, (errno, strerror):
-            print("I/O error(%s): %s" % (errno, strerror))
+        except IOError as error:
+            print("I/O error(%s): %s" % (error[0], error[1]))
 
     def get_language_id(self):
         source_file_name = self.get_source_file_name()
@@ -426,7 +427,7 @@ class AOJ_test(OnlineJudge):
                 output_file_name = self.get_output_file_path(index)
                 open(input_file_name, 'w').write(input_data)
                 open(output_file_name, 'w').write(output_data)
-            except:
+            except Exception:
                 print("testcase notfound: index%d" % index)
                 break
         return True

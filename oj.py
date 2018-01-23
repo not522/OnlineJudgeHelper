@@ -5,14 +5,14 @@ import json
 import os
 import os.path
 
+from onlinejudge import AOJ
 from onlinejudge import AtCoder
 from onlinejudge import CodeChef
 from onlinejudge import CodeForces
-from onlinejudge import AOJ
 from onlinejudge import KCS
+from onlinejudge import POJ
 from onlinejudge import yukicoder
 from onlinejudge import yukicoder_test
-from onlinejudge import POJ
 
 
 def main():

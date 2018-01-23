@@ -6,7 +6,7 @@ import subprocess
 import time
 
 
-class Solution:
+class Solution(object):
     def __init__(self, source_file_name):
         self.source_file_name = source_file_name
 

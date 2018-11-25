@@ -569,18 +569,19 @@ class AtCoder(OnlineJudge):
         setting = json.load(open(self.options.setting_file_path))['atcoder']
         subprocess.call([
             setting['browser'],
-            'https://%s.contest.atcoder.jp/submissions/me' % self.contest_id])
+            'https://beta.atcoder.jp/contests/%s/submissions/me'
+            % self.contest_id])
 
     def get_language_id_from_extension(self):
-        return {'.cpp': '10',
-                '.cc': '10',
-                '.c': '1',
-                '.java': '3',
-                '.php': '5',
-                '.py': '7',
-                '.pl': '8',
-                '.rb': '9',
-                '.hs': '11'}
+        return {'.cpp': '3003',
+                '.cc': '3003',
+                '.c': '3002',
+                '.java': '3016',
+                '.php': '3524',
+                '.py': '3023',
+                '.pl': '3522',
+                '.rb': '3024',
+                '.hs': '3014'}
 
 
 class KCS(OnlineJudge):
